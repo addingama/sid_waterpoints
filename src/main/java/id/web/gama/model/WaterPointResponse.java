@@ -1,8 +1,11 @@
 package id.web.gama.model;
 
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -44,5 +47,17 @@ public class WaterPointResponse {
         for (WaterPoint wp: waterPoints) {
             System.out.println(wp);
         }
+    }
+
+    public Set<String> getVillagesName(List<WaterPoint> waterPoints) {
+        Table<String, String, Integer> waterPointsTable
+                = HashBasedTable.create();
+
+        for (int i = 0; i < waterPoints.size(); i++) {
+            WaterPoint wp = waterPoints.get(i);
+            waterPointsTable.put(wp.getCommunityVillages(),wp.getWaterFunctioning(), i);
+        }
+
+        return waterPointsTable.rowKeySet();
     }
 }

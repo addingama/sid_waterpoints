@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 /**
  * Created by gama on 10/20/17.
  */
-public class MainTest {
+public class MainITTest {
     @Before
     public void setUp() throws Exception {
     }
