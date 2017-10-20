@@ -16,23 +16,32 @@ import java.util.List;
  */
 public class Main {
     private static final String URL = "https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json";
-    private List<WaterPoint> waterPoints = new ArrayList<WaterPoint>();
+    private WaterPointResponse response;
 
     public static void main(String [] args) {
         System.out.println("SID advance IT Test");
         Main main = new Main();
-        main.waterPoints = main.getWaterPoints(URL).getWaterPoints();
-        System.out.printf("Jumlah Water Point : %d\n\n", main.waterPoints.size());
-        System.out.println(main.waterPoints.get(0));
+        main.response = main.getWaterPoints(URL);
+        System.out.printf("Jumlah Water Point : %d\n\n", main.response.getWaterPoints().size());
+        System.out.printf("Jumlah Water Point yang berfungsi : %d\n\n", main.response.getFunctionalWaterPoint().size());
+        System.out.printf("Jumlah Water Point yang tidak berfungsi : %d\n\n", main.response.getNonFunctionalWaterPoint().size());
+        List<WaterPoint> wpUnknownFunction = main.response.getUnknownFunctionalWaterPoint();
+        System.out.printf("Jumlah Water Point yang tidak diketahui fungsinya : %d\n\n", wpUnknownFunction.size());
+        main.response.printWaterPoints(wpUnknownFunction);
     }
 
+    /**
+     * Get water point data from url and return as a list of water point encapsulated on WaterPointResponse class
+     * @param url
+     * @return WaterPointResponse
+     */
     private WaterPointResponse getWaterPoints(String url) {
         Gson gson = new Gson();
         Client client = ClientBuilder.newBuilder().build();
         WebTarget target = client.target(url);
         Response response = target.request().get();
-        String value = "{\"waterPoints\":" + response.readEntity(String.class) + "}";
-        response.close();  // You should close connections!
+        String value = String.format("{\"waterPoints\": %s}", response.readEntity(String.class));
+        response.close();
         System.out.println(value);
         return gson.fromJson(value, WaterPointResponse.class);
     }
