@@ -486,3 +486,4 @@ Generate statistical information from [Water Point Data](https://raw.githubuserc
   - Non Functioning Water Point Descending : `SortType.NON_FUNCTION_DESC`
   
   You can change the sort type on file `MainClass` line `26` by available sort type
+- If you use IntelliJ as IDE, don't forget to install `Lombok Plugin`
